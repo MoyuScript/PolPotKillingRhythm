@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bf7bscb3rq4vq"]
+
+[ext_resource type="Texture2D" uid="uid://c55kpjoldy0sc" path="res://textures/hit_line.png" id="1_cubpv"]
+
+[node name="BarLine" type="Sprite2D" groups=["playing_items"]]
+modulate = Color(1, 1, 1, 0.243137)
+texture = ExtResource("1_cubpv")

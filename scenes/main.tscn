@@ -1,4 +1,4 @@
-[gd_scene load_steps=74 format=3 uid="uid://wju63nmrvxdv"]
+[gd_scene load_steps=75 format=3 uid="uid://wju63nmrvxdv"]
 
 [ext_resource type="Texture2D" uid="uid://cg305ee57wa3q" path="res://textures/button_restart.png" id="1_ncsqm"]
 [ext_resource type="Script" path="res://scenes/Main.cs" id="1_wlpge"]
@@ -25,10 +25,11 @@
 [ext_resource type="Texture2D" uid="uid://dt33ny80kl1na" path="res://textures/note_normal.png" id="13_xm47o"]
 [ext_resource type="Script" path="res://scenes/Player.cs" id="13_y32ja"]
 [ext_resource type="Texture2D" uid="uid://duom205hxjtq5" path="res://textures/note_press_space.png" id="14_dg4fg"]
-[ext_resource type="AudioStream" uid="uid://cc3v848p1vivh" path="res://audios/bgm.ogg" id="18_602fc"]
+[ext_resource type="AudioStream" uid="uid://bijegkiiwj51j" path="res://audios/bgm.ogg" id="18_602fc"]
 [ext_resource type="Script" path="res://scripts/ProgressIcon.cs" id="19_mgpk8"]
 [ext_resource type="PackedScene" uid="uid://cxpk5x5y3xut2" path="res://scenes/hit_note.tscn" id="21_bqnjo"]
 [ext_resource type="Script" path="res://scenes/StatBoard.cs" id="22_qolqk"]
+[ext_resource type="PackedScene" uid="uid://bf7bscb3rq4vq" path="res://scenes/bar_line.tscn" id="23_4g6cv"]
 
 [sub_resource type="Animation" id="Animation_ylrw3"]
 length = 0.001
@@ -645,6 +646,7 @@ HitNormalTexture = ExtResource("10_23t7p")
 HitMissTexture = ExtResource("11_hf38k")
 HitNoteScene = ExtResource("21_bqnjo")
 HitScoreScene = ExtResource("11_rhypn")
+BarLineScene = ExtResource("23_4g6cv")
 metadata/_edit_horizontal_guides_ = []
 metadata/_edit_vertical_guides_ = []
 
@@ -738,6 +740,9 @@ offset_bottom = 81.44
 texture = ExtResource("10_ne6vp")
 
 [node name="Game" type="CanvasLayer" parent="."]
+
+[node name="BarLines" type="Node2D" parent="Game"]
+position = Vector2(937, 711)
 
 [node name="HitScore" type="Node2D" parent="Game"]
 

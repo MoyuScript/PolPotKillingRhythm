@@ -145,7 +145,7 @@ _data = {
 "miss": SubResource("Animation_jgeoy")
 }
 
-[node name="HitNote" type="Node2D"]
+[node name="HitNote" type="Node2D" groups=["playing_items"]]
 script = ExtResource("2_86wix")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

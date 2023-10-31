@@ -16,6 +16,7 @@ public partial class Main : Node2D
 
 	[Export] public PackedScene HitNoteScene;
 	[Export] public PackedScene HitScoreScene;
+	[Export] public PackedScene BarLineScene;
 
 	bool _isPlaying;
 	public bool IsPlaying
@@ -100,6 +101,8 @@ public partial class Main : Node2D
 	Node2D _trackCenter;
 	Node2D _trackContinuouslyPress;
 	Node2D _hitScoreNode;
+	Node2D _barLinesNode;
+	AudioStreamPlayer _backgroundMusicNode;
 
 	public override void _Ready()
 	{
@@ -108,6 +111,8 @@ public partial class Main : Node2D
 		_trackCenter = GetNode<Node2D>("Game/TrackList/TrackCenter");
 		_trackContinuouslyPress = GetNode<Node2D>("Game/TrackList/TrackContinuouslyPress");
 		_hitScoreNode = GetNode<Node2D>("Game/HitScore");
+		_barLinesNode = GetNode<Node2D>("Game/BarLines");
+		_backgroundMusicNode = GetNode<AudioStreamPlayer>("BackgroundMusic");
 	}
 
 	public override void _Process(double delta)
@@ -121,7 +126,16 @@ public partial class Main : Node2D
 		{
 			HandleHit();
 			MoveNotes(delta);
+			MoveBarLines(delta);
 		}
+	}
+
+	void MoveBarLines(double delta)
+	{
+		_barLinesNode.Position = _barLinesNode.Position with
+		{
+			Y = _barLinesNode.Position.Y + NoteSpeed * (float)delta,
+		};
 	}
 
 	void GenerateHitScoreSprite(Texture2D texture, Vector2 position)
@@ -211,6 +225,20 @@ public partial class Main : Node2D
 		MoveTrackNote(_trackCenter, delta);
 	}
 
+	void GenerateBarLines()
+	{
+		float songDuration = (float)_backgroundMusicNode.Stream.GetLength();
+		int beats = (int)Mathf.Ceil(songDuration * (_bpm / 60.0f));
+		int bars = beats / 4;
+
+		for (int i = 0; i < bars; i++)
+		{
+			Sprite2D barLineNode = BarLineScene.Instantiate<Sprite2D>();
+			barLineNode.Position = new Vector2(0, (-i - 2) * _pxPerBeat * 4);
+			_barLinesNode.AddChild(barLineNode);
+		}
+	}
+
 	public void StartGame()
 	{
 		if (IsPlaying)
@@ -221,9 +249,9 @@ public partial class Main : Node2D
 		IsPlaying = true;
 
 		GetNode<TextureRect>("BackUI/TextStart").Visible = false;
-		GetNode<AudioStreamPlayer>("BackgroundMusic").Play();
+		_backgroundMusicNode.Play();
 
-		
+		GenerateBarLines();
 	}
 	public void ResetGame()
 	{
@@ -234,6 +262,7 @@ public partial class Main : Node2D
 
 		IsPlaying = false;
 		IsContinuouslyNote = false;
+		GetTree().CallGroup("playing_items", "queue_free");
 	}
 }
 
