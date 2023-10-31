@@ -37,7 +37,6 @@ offset_left = -382.0
 offset_top = -52.0
 offset_right = -277.0
 offset_bottom = 53.0
-scale = Vector2(1.00008, 1.00008)
 pivot_offset = Vector2(52, 52)
 focus_mode = 0
 toggle_mode = true
