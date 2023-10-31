@@ -7,7 +7,6 @@ public partial class Main : Node2D
 {
 	[Export] public Texture2D NoteNormalTexture;
 	[Export] public Texture2D NoteCenterTexture;
-	[Export] public Array<Texture2D> NoteContinuouslyPressTextureList;
 
 	[Export] public Texture2D HitPerfectTexture;
 	[Export] public Texture2D HitGoodTexture;
@@ -17,7 +16,6 @@ public partial class Main : Node2D
 	[Export] public PackedScene HitNoteScene;
 	[Export] public PackedScene HitScoreScene;
 	[Export] public PackedScene BarLineScene;
-
 	bool _isPlaying;
 	public bool IsPlaying
 	{
@@ -66,11 +64,12 @@ public partial class Main : Node2D
 	}
 	[Signal] public delegate void OnComboChangedEventHandler();
 
-	float _bpm = 126.0f;
+	const float _bpm = 126.0f;
+	const int _ppq = 96;
 	public float Bpm { get => _bpm; }
 
 
-	float _pxPerBeat = 100.0f;
+	float _pxPerBeat = 300.0f;
 	public float PxPerBeat { get => _pxPerBeat; }
 
 	/// <summary>
@@ -99,9 +98,9 @@ public partial class Main : Node2D
 	Node2D _trackLeft;
 	Node2D _trackRight;
 	Node2D _trackCenter;
-	Node2D _trackContinuouslyPress;
 	Node2D _hitScoreNode;
 	Node2D _barLinesNode;
+	Label _endScoreLabelNode;
 	AudioStreamPlayer _backgroundMusicNode;
 
 	public override void _Ready()
@@ -109,10 +108,17 @@ public partial class Main : Node2D
 		_trackLeft = GetNode<Node2D>("Game/TrackList/TrackLeft");
 		_trackRight = GetNode<Node2D>("Game/TrackList/TrackRight");
 		_trackCenter = GetNode<Node2D>("Game/TrackList/TrackCenter");
-		_trackContinuouslyPress = GetNode<Node2D>("Game/TrackList/TrackContinuouslyPress");
 		_hitScoreNode = GetNode<Node2D>("Game/HitScore");
 		_barLinesNode = GetNode<Node2D>("Game/BarLines");
 		_backgroundMusicNode = GetNode<AudioStreamPlayer>("BackgroundMusic");
+		_endScoreLabelNode = GetNode<Label>("FrontUI/StatBoard/EndScoreLabel");
+
+		_backgroundMusicNode.Finished += OnGameEnd;
+	}
+
+	void OnGameEnd()
+	{
+		_endScoreLabelNode.Visible = true;
 	}
 
 	public override void _Process(double delta)
@@ -148,7 +154,7 @@ public partial class Main : Node2D
 
 	void HandleHitTrack(Node2D track, string actionName)
 	{
-		
+
 		for (int i = 0; i < track.GetChildCount(); i++)
 		{
 			HitNote note = track.GetChild<HitNote>(i);
@@ -162,6 +168,7 @@ public partial class Main : Node2D
 				// Miss
 				Combo = 0;
 				GenerateHitScoreSprite(HitMissTexture, note.GlobalPosition);
+				GetNode<AudioStreamPlayer>("Miss").Play();
 				note.PlayMissAnimation();
 			}
 			else
@@ -180,8 +187,8 @@ public partial class Main : Node2D
 
 					note.PlayHitAnimation();
 
-					Score += hitScore;
 					Combo += 1;
+					Score += hitScore * Combo;
 
 					Texture2D hitScoreImage = hitScore switch
 					{
@@ -192,6 +199,7 @@ public partial class Main : Node2D
 					};
 
 					GenerateHitScoreSprite(hitScoreImage, note.GlobalPosition);
+					break;
 				}
 			}
 		}
@@ -239,6 +247,59 @@ public partial class Main : Node2D
 		}
 	}
 
+	void GenerateNotes()
+	{
+		foreach (string row in Constant.Map.Split("\n"))
+		{
+			var col = row.Split(",");
+			int tick;
+
+			try
+			{
+				tick = Convert.ToInt32(col[0].Trim());
+			}
+			catch
+			{
+				continue;
+			}
+
+			string type = col[1].Trim();
+			Vector2 position = new Vector2(0, -((float)tick / _ppq) * _pxPerBeat);
+			switch (type)
+			{
+				case "L":
+					{
+						
+						HitNote note = HitNoteScene.Instantiate<HitNote>();
+						note.GetNode<Sprite2D>("Sprite2D").Texture = NoteNormalTexture;
+						note.Position = position;
+						_trackLeft.AddChild(note);
+						break;
+					}
+				case "R":
+					{
+						HitNote note = HitNoteScene.Instantiate<HitNote>();
+						note.GetNode<Sprite2D>("Sprite2D").Texture = NoteNormalTexture;
+						note.Position = position;
+						_trackRight.AddChild(note);
+						break;
+					}
+				case "S":
+					{
+						// center note
+						HitNote note = HitNoteScene.Instantiate<HitNote>();
+						note.GetNode<Sprite2D>("Sprite2D").Texture = NoteCenterTexture;
+						note.Position = position;
+						_trackCenter.AddChild(note);
+						break;
+					}
+				default:
+					break;
+			}
+		}
+
+	}
+
 	public void StartGame()
 	{
 		if (IsPlaying)
@@ -246,12 +307,13 @@ public partial class Main : Node2D
 			return;
 		}
 
-		IsPlaying = true;
 
+		IsPlaying = true;
 		GetNode<TextureRect>("BackUI/TextStart").Visible = false;
-		_backgroundMusicNode.Play();
 
 		GenerateBarLines();
+		GenerateNotes();
+		_backgroundMusicNode.Play();
 	}
 	public void ResetGame()
 	{
@@ -262,6 +324,10 @@ public partial class Main : Node2D
 
 		IsPlaying = false;
 		IsContinuouslyNote = false;
+		_endScoreLabelNode.Visible = false;
+		_barLinesNode.Position = new Vector2(940, 711);
+		Score = 0;
+		Combo = 0;
 		GetTree().CallGroup("playing_items", "queue_free");
 	}
 }

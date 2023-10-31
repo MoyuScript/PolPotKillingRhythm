@@ -4,6 +4,7 @@ using System;
 public partial class Key : TextureButton
 {
 	[Export] public string ActionName;
+	[Export] public AudioStreamPlayer Sound;
 
 	public override void _Ready()
 	{
@@ -23,6 +24,10 @@ public partial class Key : TextureButton
 	public override void _Process(double delta)
 	{
 		ButtonPressed = Input.IsActionPressed(ActionName);
+		if (Input.IsActionJustPressed(ActionName))
+		{
+			Sound.Play();
+		}
 	}
 
 	void StartEmphasis()
