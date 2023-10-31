@@ -9,6 +9,7 @@ public partial class StatBoard : Node
 		var mainNode = GetNode<Main>("/root/Main");
 		var scoreLabelNode = GetNode<Label>("ScoreLabel");
 		var comboLabelNode = GetNode<Label>("ComboLabel");
+		var endScoreLabelNode = GetNode<Label>("EndScoreLabel");
 
 		mainNode.OnScoreChanged += () =>
 		{
@@ -17,7 +18,14 @@ public partial class StatBoard : Node
 				Callable.From(
 					(int val) =>
 					{
-						scoreLabelNode.Text = $"分数：{val:D8}";
+						if (val >= 2000000)
+						{
+							scoreLabelNode.Text = $"分数：{val:D8}（>=200w）";
+						}
+						else
+						{
+							scoreLabelNode.Text = $"分数：{val:D8}";
+						}
 						_currentScore = val;
 					}
 				),
@@ -26,6 +34,7 @@ public partial class StatBoard : Node
 				0.5
 			);
 
+			endScoreLabelNode.Text = mainNode.Score >= 2000000 ? "成功去城市化（分数≥200w）" : "去城市化失败了捏（分数＜200w）";
 		};
 
 		mainNode.OnComboChanged += () =>

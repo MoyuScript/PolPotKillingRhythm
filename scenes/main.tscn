@@ -3,8 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://cg305ee57wa3q" path="res://textures/button_restart.png" id="1_ncsqm"]
 [ext_resource type="Script" path="res://scenes/Main.cs" id="1_wlpge"]
 [ext_resource type="PackedScene" uid="uid://b0fdw8xf44isg" path="res://scenes/key.tscn" id="2_vyffa"]
-[ext_resource type="Texture2D" uid="uid://cuhsmppvcj8iy" path="res://textures/note_continuously_press_dz.png" id="4_rbkqy"]
-[ext_resource type="Texture2D" uid="uid://bgtvys82sqtve" path="res://textures/note_continuously_press_sxc.png" id="5_g6xel"]
 [ext_resource type="Texture2D" uid="uid://3bv278fetkwq" path="res://textures/key_right.png" id="5_lb8w4"]
 [ext_resource type="Texture2D" uid="uid://bjxjidhefbfgw" path="res://textures/key_right_active.png" id="6_8ev0y"]
 [ext_resource type="Texture2D" uid="uid://b16dif1mgtnsd" path="res://textures/key_space.png" id="6_o8tpq"]
@@ -14,9 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://ccppia8qm56i7" path="res://textures/progress_icon_city.png" id="8_bl0vs"]
 [ext_resource type="Texture2D" uid="uid://dib8l5w6actuf" path="res://textures/sword.png" id="8_dddea"]
 [ext_resource type="Texture2D" uid="uid://bd84c0nvcwkum" path="res://textures/progress_icon_factory.png" id="9_ap3qj"]
-[ext_resource type="Texture2D" uid="uid://cm3vtpj8o6sks" path="res://textures/text_rest.png" id="9_etthp"]
 [ext_resource type="Texture2D" uid="uid://vpw8j41g8eg3" path="res://textures/progress_icon_country.png" id="10_23t7p"]
-[ext_resource type="Texture2D" uid="uid://pyfkqnkgf503" path="res://textures/text_ready.png" id="10_ne6vp"]
 [ext_resource type="Texture2D" uid="uid://dg1mao1tkmg82" path="res://textures/progress_icon_stone.png" id="11_hf38k"]
 [ext_resource type="PackedScene" uid="uid://bemvs1kjyvmwp" path="res://scenes/hit_score.tscn" id="11_rhypn"]
 [ext_resource type="Texture2D" uid="uid://cu3hp2trii0pp" path="res://textures/progress_bar_bg.png" id="12_wspxh"]
@@ -30,6 +26,10 @@
 [ext_resource type="PackedScene" uid="uid://cxpk5x5y3xut2" path="res://scenes/hit_note.tscn" id="21_bqnjo"]
 [ext_resource type="Script" path="res://scenes/StatBoard.cs" id="22_qolqk"]
 [ext_resource type="PackedScene" uid="uid://bf7bscb3rq4vq" path="res://scenes/bar_line.tscn" id="23_4g6cv"]
+[ext_resource type="AudioStream" uid="uid://dq1wjwwpxai33" path="res://audios/miss.ogg" id="30_er3aw"]
+[ext_resource type="AudioStream" uid="uid://bknrke8soyley" path="res://audios/hit_left.ogg" id="31_mcp07"]
+[ext_resource type="AudioStream" uid="uid://c6j176lxh8oy" path="res://audios/hit_right.ogg" id="32_twrac"]
+[ext_resource type="AudioStream" uid="uid://4wsa8ykhcsos" path="res://audios/hit_center.ogg" id="33_w5gmn"]
 
 [sub_resource type="Animation" id="Animation_ylrw3"]
 length = 0.001
@@ -639,7 +639,6 @@ node_connections = [&"output", 0, &"OneShot", &"HitBlend", 0, &"Animation 2", &"
 script = ExtResource("1_wlpge")
 NoteNormalTexture = ExtResource("13_xm47o")
 NoteCenterTexture = ExtResource("14_dg4fg")
-NoteContinuouslyPressTextureList = Array[Texture2D]([ExtResource("4_rbkqy"), ExtResource("5_g6xel")])
 HitPerfectTexture = ExtResource("8_bl0vs")
 HitGoodTexture = ExtResource("9_ap3qj")
 HitNormalTexture = ExtResource("10_23t7p")
@@ -669,16 +668,18 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.407843)
 
-[node name="KeyLeft" parent="BackUI" instance=ExtResource("2_vyffa")]
+[node name="KeyLeft" parent="BackUI" node_paths=PackedStringArray("Sound") instance=ExtResource("2_vyffa")]
+Sound = NodePath("../../HitLeft")
 
-[node name="KeyRight" parent="BackUI" instance=ExtResource("2_vyffa")]
+[node name="KeyRight" parent="BackUI" node_paths=PackedStringArray("Sound") instance=ExtResource("2_vyffa")]
 offset_left = 273.0
 offset_right = 378.0
 texture_normal = ExtResource("5_lb8w4")
 texture_pressed = ExtResource("6_8ev0y")
 ActionName = "key_right"
+Sound = NodePath("../../HitRight")
 
-[node name="KeySpace" parent="BackUI" instance=ExtResource("2_vyffa")]
+[node name="KeySpace" parent="BackUI" node_paths=PackedStringArray("Sound") instance=ExtResource("2_vyffa")]
 offset_left = -143.0
 offset_top = 84.0
 offset_right = 125.0
@@ -687,6 +688,7 @@ pivot_offset = Vector2(134, 41)
 texture_normal = ExtResource("6_o8tpq")
 texture_pressed = ExtResource("7_ulpee")
 ActionName = "key_space"
+Sound = NodePath("../../HitCenter")
 
 [node name="HitLine" type="ColorRect" parent="BackUI"]
 anchors_preset = -1
@@ -712,32 +714,6 @@ offset_top = -25.4
 offset_right = 248.84
 offset_bottom = 24.6
 texture = ExtResource("8_b5523")
-
-[node name="TextRest" type="TextureRect" parent="BackUI"]
-visible = false
-anchors_preset = -1
-anchor_left = 0.495
-anchor_top = 0.4
-anchor_right = 0.495
-anchor_bottom = 0.4
-offset_left = -323.4
-offset_top = -26.0
-offset_right = 321.6
-offset_bottom = 25.0
-texture = ExtResource("9_etthp")
-
-[node name="TextReady" type="TextureRect" parent="BackUI"]
-visible = false
-anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.407
-anchor_right = 0.5
-anchor_bottom = 0.407
-offset_left = -254.0
-offset_top = -81.56
-offset_right = 237.0
-offset_bottom = 81.44
-texture = ExtResource("10_ne6vp")
 
 [node name="Game" type="CanvasLayer" parent="."]
 
@@ -819,9 +795,6 @@ position = Vector2(1289, 710)
 
 [node name="TrackCenter" type="Node2D" parent="Game/TrackList"]
 position = Vector2(957, 710)
-
-[node name="TrackContinuouslyPress" type="Node2D" parent="Game/TrackList"]
-position = Vector2(957, 423)
 
 [node name="FrontUI" type="CanvasLayer" parent="."]
 
@@ -945,7 +918,42 @@ theme_override_colors/font_color = Color(0.992157, 0.870588, 0.0509804, 1)
 theme_override_font_sizes/font_size = 52
 text = "连击：0"
 
+[node name="EndScoreLabel" type="Label" parent="FrontUI/StatBoard"]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -304.0
+offset_top = -140.0
+offset_right = 301.0
+offset_bottom = -54.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.992157, 0.870588, 0.0509804, 1)
+theme_override_font_sizes/font_size = 60
+
 [node name="BackgroundMusic" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("18_602fc")
+
+[node name="HitLeft" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("31_mcp07")
+volume_db = -5.0
+max_polyphony = 16
+
+[node name="HitRight" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("32_twrac")
+volume_db = -5.0
+max_polyphony = 16
+
+[node name="HitCenter" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("33_w5gmn")
+volume_db = -10.0
+max_polyphony = 16
+
+[node name="Miss" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("30_er3aw")
+max_polyphony = 16
 
 [connection signal="pressed" from="FrontUI/ButtonRestart" to="." method="ResetGame"]

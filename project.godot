@@ -13,6 +13,7 @@ config_version=5
 config/name="Pol Pot Killing Rhythm"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.1", "C#", "Forward Plus")
+config/icon="res://textures/icon.png"
 
 [display]
 
