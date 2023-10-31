@@ -1,4 +1,4 @@
-[gd_scene load_steps=67 format=3 uid="uid://wju63nmrvxdv"]
+[gd_scene load_steps=68 format=3 uid="uid://wju63nmrvxdv"]
 
 [ext_resource type="Texture2D" uid="uid://cg305ee57wa3q" path="res://textures/button_restart.png" id="1_ncsqm"]
 [ext_resource type="Script" path="res://scenes/Main.cs" id="1_wlpge"]
@@ -22,6 +22,7 @@
 [ext_resource type="Script" path="res://scenes/Player.cs" id="13_y32ja"]
 [ext_resource type="AudioStream" uid="uid://cc3v848p1vivh" path="res://audios/bgm.ogg" id="18_602fc"]
 [ext_resource type="Script" path="res://scripts/ProgressIcon.cs" id="19_mgpk8"]
+[ext_resource type="Script" path="res://scenes/StatBoard.cs" id="22_qolqk"]
 
 [sub_resource type="Animation" id="Animation_7ddke"]
 resource_name = "hit_left"
@@ -180,7 +181,7 @@ animation = &"idle"
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_hqsto"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_unli0"]
-graph_offset = Vector2(-856.172, 382.079)
+graph_offset = Vector2(-718.172, 46.7454)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_0vcbd")
 nodes/Animation/position = Vector2(-386.667, 146.667)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_r8pgy")
@@ -682,6 +683,7 @@ color = Color(0.988235, 0.862745, 0.0509804, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="TextStart" type="TextureRect" parent="BackUI"]
+visible = false
 anchors_preset = -1
 anchor_left = 0.498
 anchor_top = 0.53
@@ -725,7 +727,7 @@ texture = ExtResource("10_ne6vp")
 script = ExtResource("13_y32ja")
 
 [node name="Player" type="Sprite2D" parent="Game/Player"]
-position = Vector2(959.476, 813.952)
+position = Vector2(947.936, 810.127)
 texture = ExtResource("7_8r2jl")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Game/Player/Player"]
@@ -879,19 +881,22 @@ script = ExtResource("19_mgpk8")
 TargetProgress = 0.065
 ProgressBar = NodePath("../ProgressBar")
 
-[node name="ScoreLabel" type="Label" parent="FrontUI"]
+[node name="StatBoard" type="Node" parent="FrontUI"]
+script = ExtResource("22_qolqk")
+
+[node name="ScoreLabel" type="Label" parent="FrontUI/StatBoard"]
 anchors_preset = -1
 anchor_top = 0.145
 anchor_bottom = 0.145
 offset_left = 41.0
 offset_top = -39.6
-offset_right = 341.0
+offset_right = 437.0
 offset_bottom = 40.4
 theme_override_colors/font_color = Color(0.992157, 0.870588, 0.0509804, 1)
 theme_override_font_sizes/font_size = 52
 text = "分数：00000000"
 
-[node name="ComboLabel" type="Label" parent="FrontUI"]
+[node name="ComboLabel" type="Label" parent="FrontUI/StatBoard"]
 anchors_preset = -1
 anchor_top = 0.218
 anchor_bottom = 0.218
