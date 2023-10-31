@@ -4,4 +4,5 @@
 
 [node name="BarLine" type="Sprite2D" groups=["playing_items"]]
 modulate = Color(1, 1, 1, 0.243137)
+scale = Vector2(0.995, 0.995)
 texture = ExtResource("1_cubpv")

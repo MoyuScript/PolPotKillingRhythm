@@ -742,7 +742,7 @@ texture = ExtResource("10_ne6vp")
 [node name="Game" type="CanvasLayer" parent="."]
 
 [node name="BarLines" type="Node2D" parent="Game"]
-position = Vector2(937, 711)
+position = Vector2(940, 711)
 
 [node name="HitScore" type="Node2D" parent="Game"]
 
