@@ -30,7 +30,7 @@ public partial class StatBoard : Node
 
 		mainNode.OnComboChanged += () =>
 		{
-			comboLabelNode.Text = mainNode.Combo.ToString();
+			comboLabelNode.Text = $"连击：{mainNode.Combo}";
 		};
 	}
 }
