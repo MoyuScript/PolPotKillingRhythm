@@ -43,9 +43,7 @@ public partial class Player : Node2D
 					PlayHitRightAnimation();
 				}
 			}
-			
 		}
-		
 	}
 
 	void PlayHitLeftAnimation()

@@ -1,8 +1,10 @@
-[gd_scene load_steps=68 format=3 uid="uid://wju63nmrvxdv"]
+[gd_scene load_steps=74 format=3 uid="uid://wju63nmrvxdv"]
 
 [ext_resource type="Texture2D" uid="uid://cg305ee57wa3q" path="res://textures/button_restart.png" id="1_ncsqm"]
 [ext_resource type="Script" path="res://scenes/Main.cs" id="1_wlpge"]
 [ext_resource type="PackedScene" uid="uid://b0fdw8xf44isg" path="res://scenes/key.tscn" id="2_vyffa"]
+[ext_resource type="Texture2D" uid="uid://cuhsmppvcj8iy" path="res://textures/note_continuously_press_dz.png" id="4_rbkqy"]
+[ext_resource type="Texture2D" uid="uid://bgtvys82sqtve" path="res://textures/note_continuously_press_sxc.png" id="5_g6xel"]
 [ext_resource type="Texture2D" uid="uid://3bv278fetkwq" path="res://textures/key_right.png" id="5_lb8w4"]
 [ext_resource type="Texture2D" uid="uid://bjxjidhefbfgw" path="res://textures/key_right_active.png" id="6_8ev0y"]
 [ext_resource type="Texture2D" uid="uid://b16dif1mgtnsd" path="res://textures/key_space.png" id="6_o8tpq"]
@@ -16,30 +18,17 @@
 [ext_resource type="Texture2D" uid="uid://vpw8j41g8eg3" path="res://textures/progress_icon_country.png" id="10_23t7p"]
 [ext_resource type="Texture2D" uid="uid://pyfkqnkgf503" path="res://textures/text_ready.png" id="10_ne6vp"]
 [ext_resource type="Texture2D" uid="uid://dg1mao1tkmg82" path="res://textures/progress_icon_stone.png" id="11_hf38k"]
+[ext_resource type="PackedScene" uid="uid://bemvs1kjyvmwp" path="res://scenes/hit_score.tscn" id="11_rhypn"]
 [ext_resource type="Texture2D" uid="uid://cu3hp2trii0pp" path="res://textures/progress_bar_bg.png" id="12_wspxh"]
 [ext_resource type="Script" path="res://scenes/ProgressBar.cs" id="13_6b1ra"]
 [ext_resource type="Texture2D" uid="uid://cpvxp330mgxul" path="res://textures/progress_bar.png" id="13_x2g7c"]
+[ext_resource type="Texture2D" uid="uid://dt33ny80kl1na" path="res://textures/note_normal.png" id="13_xm47o"]
 [ext_resource type="Script" path="res://scenes/Player.cs" id="13_y32ja"]
+[ext_resource type="Texture2D" uid="uid://duom205hxjtq5" path="res://textures/note_press_space.png" id="14_dg4fg"]
 [ext_resource type="AudioStream" uid="uid://cc3v848p1vivh" path="res://audios/bgm.ogg" id="18_602fc"]
 [ext_resource type="Script" path="res://scripts/ProgressIcon.cs" id="19_mgpk8"]
+[ext_resource type="PackedScene" uid="uid://cxpk5x5y3xut2" path="res://scenes/hit_note.tscn" id="21_bqnjo"]
 [ext_resource type="Script" path="res://scenes/StatBoard.cs" id="22_qolqk"]
-
-[sub_resource type="Animation" id="Animation_7ddke"]
-resource_name = "hit_left"
-length = 0.5
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.5),
-"transitions": PackedFloat32Array(0.5, 0.5, 1),
-"update": 0,
-"values": [Vector2(951, 814), Vector2(925, 790), Vector2(951, 814)]
-}
 
 [sub_resource type="Animation" id="Animation_ylrw3"]
 length = 0.001
@@ -66,23 +55,6 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_v28sr"]
-resource_name = "hit_right"
-length = 0.5
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.5),
-"transitions": PackedFloat32Array(0.5, 0.5, 1),
-"update": 0,
-"values": [Vector2(951, 814), Vector2(977, 790), Vector2(951, 814)]
 }
 
 [sub_resource type="Animation" id="Animation_uqw7v"]
@@ -129,6 +101,40 @@ tracks/1/keys = {
 "transitions": PackedFloat32Array(0.5, 0.5, 1),
 "update": 0,
 "values": [Vector2(1, 1), Vector2(2, 2), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_7ddke"]
+resource_name = "hit_left"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.5),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(951, 814), Vector2(925, 790), Vector2(951, 814)]
+}
+
+[sub_resource type="Animation" id="Animation_v28sr"]
+resource_name = "hit_right"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.5),
+"transitions": PackedFloat32Array(0.5, 0.5, 1),
+"update": 0,
+"values": [Vector2(951, 814), Vector2(977, 790), Vector2(951, 814)]
 }
 
 [sub_resource type="Animation" id="Animation_e4r32"]
@@ -181,7 +187,7 @@ animation = &"idle"
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_hqsto"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_unli0"]
-graph_offset = Vector2(-718.172, 46.7454)
+graph_offset = Vector2(-814.701, 92.314)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_0vcbd")
 nodes/Animation/position = Vector2(-386.667, 146.667)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_r8pgy")
@@ -199,36 +205,7 @@ nodes/HitBlendBig/position = Vector2(-80, 440)
 nodes/OneShot/node = SubResource("AnimationNodeOneShot_hqsto")
 nodes/OneShot/position = Vector2(133.333, 200)
 nodes/output/position = Vector2(346.667, 160)
-node_connections = [&"output", 0, &"OneShot", &"OneShot", 0, &"Animation", &"OneShot", 1, &"HitBlendBig", &"HitBlend", 0, &"Animation 2", &"HitBlend", 1, &"Animation 4", &"HitBlend", 2, &"Animation 3", &"HitBlendBig", 0, &"HitBlend", &"HitBlendBig", 1, &"Animation 5"]
-
-[sub_resource type="Animation" id="Animation_q51lg"]
-resource_name = "hit"
-length = 0.5
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.5),
-"transitions": PackedFloat32Array(0.5, 0.5, 0.5),
-"update": 0,
-"values": [Vector2(1063, 879), Vector2(1230, 837), Vector2(1063, 879)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.5),
-"transitions": PackedFloat32Array(0.5, 0.5, 0.5),
-"update": 0,
-"values": [0.0, -0.421726, 0.0]
-}
+node_connections = [&"output", 0, &"OneShot", &"HitBlend", 0, &"Animation 2", &"HitBlend", 1, &"Animation 4", &"HitBlend", 2, &"Animation 3", &"HitBlendBig", 0, &"HitBlend", &"HitBlendBig", 1, &"Animation 5", &"OneShot", 0, &"Animation", &"OneShot", 1, &"HitBlendBig"]
 
 [sub_resource type="Animation" id="Animation_huyep"]
 length = 0.001
@@ -267,6 +244,35 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_q51lg"]
+resource_name = "hit"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.5),
+"transitions": PackedFloat32Array(0.5, 0.5, 0.5),
+"update": 0,
+"values": [Vector2(1063, 879), Vector2(1230, 837), Vector2(1063, 879)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.5),
+"transitions": PackedFloat32Array(0.5, 0.5, 0.5),
+"update": 0,
+"values": [0.0, -0.421726, 0.0]
 }
 
 [sub_resource type="Animation" id="Animation_cexap"]
@@ -397,7 +403,7 @@ animation = &"idle"
 [sub_resource type="AnimationNodeOneShot" id="AnimationNodeOneShot_yspme"]
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_glupr"]
-graph_offset = Vector2(-735.2, 71.6003)
+graph_offset = Vector2(-517.58, 84.5984)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_5k8g4")
 nodes/Animation/position = Vector2(-386.667, 146.667)
 "nodes/Animation 2/node" = SubResource("AnimationNodeAnimation_a7vsx")
@@ -411,38 +417,9 @@ nodes/HitBlend/position = Vector2(-280, 440)
 nodes/HitBlendBig/node = SubResource("AnimationNodeBlend2_0vg1g")
 nodes/HitBlendBig/position = Vector2(-80, 440)
 nodes/OneShot/node = SubResource("AnimationNodeOneShot_yspme")
-nodes/OneShot/position = Vector2(133.333, 200)
-nodes/output/position = Vector2(346.667, 160)
-node_connections = [&"output", 0, &"OneShot", &"HitBlendBig", 0, &"HitBlend", &"HitBlendBig", 1, &"Animation 5", &"OneShot", 0, &"Animation", &"OneShot", 1, &"HitBlendBig", &"HitBlend", 0, &"Animation 2", &"HitBlend", 1, &"Animation 4"]
-
-[sub_resource type="Animation" id="Animation_2c8ot"]
-resource_name = "hit"
-length = 0.5
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.5),
-"transitions": PackedFloat32Array(0.5, 0.5, 0.5),
-"update": 0,
-"values": [Vector2(858, 879), Vector2(689, 833), Vector2(858, 879)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath(".:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.5),
-"transitions": PackedFloat32Array(0.5, 0.5, 0.5),
-"update": 0,
-"values": [0.0, 0.431195, 0.0]
-}
+nodes/OneShot/position = Vector2(253.333, 200)
+nodes/output/position = Vector2(506.667, 160)
+node_connections = [&"output", 0, &"OneShot", &"HitBlend", 0, &"Animation 2", &"HitBlend", 1, &"Animation 4", &"HitBlendBig", 0, &"HitBlend", &"HitBlendBig", 1, &"Animation 5", &"OneShot", 0, &"Animation", &"OneShot", 1, &"HitBlendBig"]
 
 [sub_resource type="Animation" id="Animation_aupk1"]
 length = 0.001
@@ -481,6 +458,35 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [Vector2(-1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_2c8ot"]
+resource_name = "hit"
+length = 0.5
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.5),
+"transitions": PackedFloat32Array(0.5, 0.5, 0.5),
+"update": 0,
+"values": [Vector2(858, 879), Vector2(689, 833), Vector2(858, 879)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.5),
+"transitions": PackedFloat32Array(0.5, 0.5, 0.5),
+"update": 0,
+"values": [0.0, 0.431195, 0.0]
 }
 
 [sub_resource type="Animation" id="Animation_6b1i0"]
@@ -630,10 +636,17 @@ node_connections = [&"output", 0, &"OneShot", &"HitBlend", 0, &"Animation 2", &"
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_wlpge")
+NoteNormalTexture = ExtResource("13_xm47o")
+NoteCenterTexture = ExtResource("14_dg4fg")
+NoteContinuouslyPressTextureList = Array[Texture2D]([ExtResource("4_rbkqy"), ExtResource("5_g6xel")])
+HitPerfectTexture = ExtResource("8_bl0vs")
+HitGoodTexture = ExtResource("9_ap3qj")
+HitNormalTexture = ExtResource("10_23t7p")
+HitMissTexture = ExtResource("11_hf38k")
+HitNoteScene = ExtResource("21_bqnjo")
+HitScoreScene = ExtResource("11_rhypn")
 metadata/_edit_horizontal_guides_ = []
 metadata/_edit_vertical_guides_ = []
-
-[node name="CanvasGroup" type="CanvasGroup" parent="."]
 
 [node name="BackUI" type="CanvasLayer" parent="."]
 
@@ -679,11 +692,14 @@ anchor_left = 0.0520833
 anchor_top = 0.655556
 anchor_right = 0.927083
 anchor_bottom = 0.657407
+offset_left = 6.86646e-05
+offset_top = 1.99951
+offset_right = 0.00012207
+offset_bottom = 1.99951
 color = Color(0.988235, 0.862745, 0.0509804, 1)
 metadata/_edit_use_anchors_ = true
 
 [node name="TextStart" type="TextureRect" parent="BackUI"]
-visible = false
 anchors_preset = -1
 anchor_left = 0.498
 anchor_top = 0.53
@@ -723,11 +739,13 @@ texture = ExtResource("10_ne6vp")
 
 [node name="Game" type="CanvasLayer" parent="."]
 
+[node name="HitScore" type="Node2D" parent="Game"]
+
 [node name="Player" type="Node2D" parent="Game"]
 script = ExtResource("13_y32ja")
 
 [node name="Player" type="Sprite2D" parent="Game/Player"]
-position = Vector2(947.936, 810.127)
+position = Vector2(959.476, 813.952)
 texture = ExtResource("7_8r2jl")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Game/Player/Player"]
@@ -785,6 +803,20 @@ parameters/HitBlendBig/blend_amount = 0
 parameters/OneShot/active = false
 parameters/OneShot/internal_active = false
 parameters/OneShot/request = 0
+
+[node name="TrackList" type="Node2D" parent="Game"]
+
+[node name="TrackLeft" type="Node2D" parent="Game/TrackList"]
+position = Vector2(631, 710)
+
+[node name="TrackRight" type="Node2D" parent="Game/TrackList"]
+position = Vector2(1289, 710)
+
+[node name="TrackCenter" type="Node2D" parent="Game/TrackList"]
+position = Vector2(957, 710)
+
+[node name="TrackContinuouslyPress" type="Node2D" parent="Game/TrackList"]
+position = Vector2(957, 423)
 
 [node name="FrontUI" type="CanvasLayer" parent="."]
 

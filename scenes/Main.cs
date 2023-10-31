@@ -1,8 +1,22 @@
 using Godot;
+using Godot.Collections;
 using System;
+using System.Linq;
 
 public partial class Main : Node2D
 {
+	[Export] public Texture2D NoteNormalTexture;
+	[Export] public Texture2D NoteCenterTexture;
+	[Export] public Array<Texture2D> NoteContinuouslyPressTextureList;
+
+	[Export] public Texture2D HitPerfectTexture;
+	[Export] public Texture2D HitGoodTexture;
+	[Export] public Texture2D HitNormalTexture;
+	[Export] public Texture2D HitMissTexture;
+
+	[Export] public PackedScene HitNoteScene;
+	[Export] public PackedScene HitScoreScene;
+
 	bool _isPlaying;
 	public bool IsPlaying
 	{
@@ -40,7 +54,8 @@ public partial class Main : Node2D
 	[Signal] public delegate void OnScoreChangedEventHandler();
 
 	int _combo;
-	public int Combo {
+	public int Combo
+	{
 		get => _combo;
 		private set
 		{
@@ -50,12 +65,150 @@ public partial class Main : Node2D
 	}
 	[Signal] public delegate void OnComboChangedEventHandler();
 
+	float _bpm = 126.0f;
+	public float Bpm { get => _bpm; }
+
+
+	float _pxPerBeat = 100.0f;
+	public float PxPerBeat { get => _pxPerBeat; }
+
+	/// <summary>
+	/// px/seconds
+	/// </summary>
+	public float NoteSpeed
+	{
+		get
+		{
+			float beatsPerSeconds = _bpm / 60.0f;
+			float secondsPerBeat = 1.0f / beatsPerSeconds;
+			return _pxPerBeat / secondsPerBeat;
+		}
+	}
+
+	(float Top, float Bottom) _hitArea = new(-100, 100);
+
+	const int _hitPerfectError = 10;
+	const int _hitPerfectScore = 300;
+	const int _hitGoodError = 30;
+	const int _hitGoodScore = 100;
+	const int _hitNormalError = 100;
+	const int _hitNormalScore = 50;
+
+
+	Node2D _trackLeft;
+	Node2D _trackRight;
+	Node2D _trackCenter;
+	Node2D _trackContinuouslyPress;
+	Node2D _hitScoreNode;
+
+	public override void _Ready()
+	{
+		_trackLeft = GetNode<Node2D>("Game/TrackList/TrackLeft");
+		_trackRight = GetNode<Node2D>("Game/TrackList/TrackRight");
+		_trackCenter = GetNode<Node2D>("Game/TrackList/TrackCenter");
+		_trackContinuouslyPress = GetNode<Node2D>("Game/TrackList/TrackContinuouslyPress");
+		_hitScoreNode = GetNode<Node2D>("Game/HitScore");
+	}
+
 	public override void _Process(double delta)
 	{
 		if (!IsPlaying && Input.IsActionJustPressed("key_space"))
 		{
 			StartGame();
 		}
+
+		if (IsPlaying)
+		{
+			HandleHit();
+			MoveNotes(delta);
+		}
+	}
+
+	void GenerateHitScoreSprite(Texture2D texture, Vector2 position)
+	{
+		Node2D hitScoreSprite = HitScoreScene.Instantiate<Node2D>();
+		hitScoreSprite.GetNode<Sprite2D>("Sprite2D").Texture = texture;
+		hitScoreSprite.Position = position;
+		_hitScoreNode.AddChild(hitScoreSprite);
+	}
+
+	void HandleHitTrack(Node2D track, string actionName)
+	{
+		
+		for (int i = 0; i < track.GetChildCount(); i++)
+		{
+			HitNote note = track.GetChild<HitNote>(i);
+			if (note.IsQueuedForDeletion()) continue;
+			if (note.IsDisappearing)
+			{
+				continue;
+			}
+			if (note.Position.Y >= _hitArea.Bottom)
+			{
+				// Miss
+				Combo = 0;
+				GenerateHitScoreSprite(HitMissTexture, note.GlobalPosition);
+				note.PlayMissAnimation();
+			}
+			else
+			{
+				bool isInHitArea = note.Position.Y >= _hitArea.Top;
+				if (isInHitArea && Input.IsActionJustPressed(actionName))
+				{
+					int error = (int)Mathf.Abs(note.Position.Y);
+					int hitScore = error switch
+					{
+						<= _hitPerfectError => _hitPerfectScore,
+						<= _hitGoodError => _hitGoodScore,
+						<= _hitNormalError => _hitNormalScore,
+						_ => _hitNormalScore,
+					};
+
+					note.PlayHitAnimation();
+
+					Score += hitScore;
+					Combo += 1;
+
+					Texture2D hitScoreImage = hitScore switch
+					{
+						_hitPerfectScore => HitPerfectTexture,
+						_hitGoodScore => HitGoodTexture,
+						_hitNormalScore => HitNormalTexture,
+						_ => HitNormalTexture
+					};
+
+					GenerateHitScoreSprite(hitScoreImage, note.GlobalPosition);
+				}
+			}
+		}
+	}
+
+	void HandleHit()
+	{
+		HandleHitTrack(_trackLeft, "key_left");
+		HandleHitTrack(_trackRight, "key_right");
+		HandleHitTrack(_trackCenter, "key_space");
+	}
+
+	void MoveTrackNote(Node2D track, double delta)
+	{
+		for (int i = 0; i < track.GetChildCount(); i++)
+		{
+			HitNote note = track.GetChild<HitNote>(i);
+			if (note.IsQueuedForDeletion()) continue;
+			if (note.IsDisappearing) continue;
+			note.Position = note.Position with
+			{
+				Y = note.Position.Y + NoteSpeed * (float)delta
+			};
+		}
+	}
+
+	void MoveNotes(double delta)
+	{
+		MoveTrackNote(_trackLeft, delta);
+		MoveTrackNote(_trackRight, delta);
+		MoveTrackNote(_trackCenter, delta);
 	}
 
 	public void StartGame()
@@ -65,10 +218,12 @@ public partial class Main : Node2D
 			return;
 		}
 
-		IsPlaying = false;
+		IsPlaying = true;
 
 		GetNode<TextureRect>("BackUI/TextStart").Visible = false;
 		GetNode<AudioStreamPlayer>("BackgroundMusic").Play();
+
+		
 	}
 	public void ResetGame()
 	{
