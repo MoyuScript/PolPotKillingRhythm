@@ -77,7 +77,7 @@ _data = {
 "disappear": SubResource("Animation_22ufv")
 }
 
-[node name="HitScore" type="Node2D"]
+[node name="HitScore" type="Node2D" groups=["playing_items"]]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_6ayb7")
