@@ -2,6 +2,6 @@
 
 下载地址：[Releases](https://github.com/MoyuScript/PolPotKillingRhythm/releases)、[夸克网盘（提取码：M8aU）](https://pan.quark.cn/s/807ced16e2c4)、[百度网盘（提取码：1145）](https://pan.baidu.com/s/1Q3jTw96RbcVglWg6SGQgig?pwd=1145)
 
-[哔哩哔哩视频](https://www.bilibili.com/video/BV1tc411f7tF/)
+[哔哩哔哩视频](https://www.bilibili.com/video/BV1DN4y1k7fi/)
 
 ![Snipaste_2023-11-01_01-46-47](https://github.com/MoyuScript/PolPotKillingRhythm/assets/45550579/fa8dc4c5-1976-4978-b6e3-cb7245cf38ba)
